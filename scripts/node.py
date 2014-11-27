@@ -34,13 +34,16 @@ class PM_from_TTS():
         rospy.loginfo("Received cb with:\n  text_said: " +
                        str(data.feedback.text_said) +
                        "\n  marks.id: " +str(data.feedback.marks.id))
-        data = TtsActionFeedback()
+        #data = TtsActionFeedback()
         if "doTrick trickName=" in data.feedback.marks.id:
             rospy.loginfo("Found trigger: " + str(data.feedback.marks.id))
             motion_name = data.feedback.marks.id.replace("doTrick trickName=", "")
+            motion_name = motion_name.split()[0] # In case there are more params
+            # doTrick trickName=minidance checkSafety=0 #like in this case
             pmag = PlayMotionActionGoal()
             pmag.goal.motion_name = motion_name
             pmag.goal.skip_planning = False
+            rospy.logwarn("Sending play_motion goal: " + str(motion_name))
             self.pm_pub.publish(pmag)
         
 
@@ -48,7 +51,7 @@ if __name__ == '__main__':
     rospy.init_node('play_motion_from_tts_feedback_node')
 
     node = PM_from_TTS()
-
+    rospy.spin()
 # header: 
 #   seq: 407
 #   stamp: 

@@ -161,3 +161,14 @@ install(PROGRAMS
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
+
+
+# Launch files install
+
+foreach(dir launch)
+
+install(DIRECTORY ${dir}/
+
+DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/${dir})
+
+endforeach(dir)
